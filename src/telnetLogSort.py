@@ -19,10 +19,12 @@ with open('TELNET-CSV-LOG-FILE-OUTPUT-FROM-POWERSHELL-SCRIPT-FILEPATH') as csvfi
 			if row[0][2].isdigit(): #if the value is a digit, it is an IP
 				prevIpVal = row[0][2:]
 				curIpVal = prevIpVal
+				stored[curIpVal] = False
 				counter+=1
 		
 		elif row[0][0].isdigit(): #if it is an IP and is not the first address
 			curIpVal = row[0]
+			stored[curIpVal]=False #automatically set to false, can be overwritten if true in separate case
 			if prevIpVal[0][0].isdigit(): #previous is IP and not blank, no connection made
 				stored[prevIpVal] = False
 				prevIpVal = curIpVal
@@ -36,7 +38,6 @@ with open('TELNET-CSV-LOG-FILE-OUTPUT-FROM-POWERSHELL-SCRIPT-FILEPATH') as csvfi
 			else: #connection made
 				stored[curIpVal]=True
 				prevIpVal = "Not"
-
 csvfile.close() #close file reader
     
 #write to a new formatted csv, containing telnet ip and connection status
